@@ -1,12 +1,12 @@
 import { Schema, model } from 'mongoose';
 import {
-  Guardian,
-  LocalGuardian,
-  Student,
-  UserName,
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName,
 } from './student.interface';
 
-const userNameSchema = new Schema<UserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
@@ -20,7 +20,7 @@ const userNameSchema = new Schema<UserName>({
   },
 });
 
-const guardianSchema = new Schema<Guardian>({
+const guardianSchema = new Schema<TGuardian>({
   fatherName: {
     type: String,
     required: true,
@@ -47,7 +47,7 @@ const guardianSchema = new Schema<Guardian>({
   },
 });
 
-const localGuradianSchema = new Schema<LocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
   name: {
     type: String,
     required: true,
@@ -66,21 +66,26 @@ const localGuradianSchema = new Schema<LocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<Student>({
+const studentSchema = new Schema<TStudent>({
   id: { type: String },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: [true, "User id is required"],
+    unique: true,
+    ref: "User"
+  },
   name: userNameSchema,
   gender: ['male', 'female'],
   dateOfBirth: { type: String },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
-  bloogGroup: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  bloodGroup: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
   presentAddress: { type: String, required: true },
-  permanentAddres: { type: String, required: true },
+  permanentAddress: { type: String, required: true },
   guardian: guardianSchema,
-  localGuardian: localGuradianSchema,
+  localGuardian: localGuardianSchema,
   profileImg: { type: String },
-  isActive: ['active', 'blocked'],
 });
 
-export const StudentModel = model<Student>('Student', studentSchema);
+export const StudentModel = model<TStudent>('Student', studentSchema);
