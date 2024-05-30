@@ -23,18 +23,18 @@ export type TLocalGuardian = {
 };
 
 export type TStudent = {
-  id: string;
+  password: string;
   user: Types.ObjectId,
   name: TUserName;
   gender: 'male' | 'female';
   dateOfBirth?: string;
   email: string;
-  contactNo: string;
+  contactNumber: string;
   emergencyContactNo: string;
   bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
-  profileImg?: string;
+  profileImage?: string;
 };

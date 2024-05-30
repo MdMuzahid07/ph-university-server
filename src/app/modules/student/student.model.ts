@@ -67,7 +67,9 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 const studentSchema = new Schema<TStudent>({
-  id: { type: String },
+  password: {
+    type: String,
+  },
   user: {
     type: Schema.Types.ObjectId,
     required: [true, "User id is required"],
@@ -78,14 +80,14 @@ const studentSchema = new Schema<TStudent>({
   gender: ['male', 'female'],
   dateOfBirth: { type: String },
   email: { type: String, required: true },
-  contactNo: { type: String, required: true },
+  contactNumber: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
-  profileImg: { type: String },
+  profileImage: { type: String },
 });
 
 export const StudentModel = model<TStudent>('Student', studentSchema);

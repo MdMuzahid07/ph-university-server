@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
+import { RequestHandler } from 'express';
 import { StudentServices } from './student.service';
+import catchAsync from '../../utils/catchAsync';
 
 
-const getAllStudents = async (req: Request, res: Response) => {
-  try {
+
+const getAllStudents = catchAsync(
+  async (req, res, next) => {
     const result = await StudentServices.getAllStudentsFromDB();
 
     res.status(200).json({
@@ -11,12 +13,12 @@ const getAllStudents = async (req: Request, res: Response) => {
       message: 'Students are retrieved succesfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
-  }
-};
 
-const getSingleStudent = async (req: Request, res: Response) => {
+  }
+
+);
+
+const getSingleStudent: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
 
@@ -28,7 +30,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (err) {
-    console.log(err);
+    next(err)
   }
 };
 
