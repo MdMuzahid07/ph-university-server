@@ -41,6 +41,7 @@ const createStudentValidationSchema = z.object({
             presentAddress: z.string().trim(),
             permanentAddress: z.string().trim(),
             profileImage: z.string().optional(),
+            admissionSemester: z.string()
         })
     })
 })

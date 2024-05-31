@@ -55,9 +55,6 @@ AcademicSemesterSchema.pre("save", async function (next) {
 
 
 
-
-
-
 // creating user model 
 
 const AcademicSemesterModel = model<TAcademicSemester>("AcademicSemester", AcademicSemesterSchema);

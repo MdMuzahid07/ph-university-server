@@ -63,10 +63,15 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   address: {
     type: String,
     required: true,
-  },
+  }
 });
 
 const studentSchema = new Schema<TStudent>({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   password: {
     type: String,
   },
@@ -88,6 +93,10 @@ const studentSchema = new Schema<TStudent>({
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
   profileImage: { type: String },
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: "AcademicSemester"
+  }
 });
 
 export const StudentModel = model<TStudent>('Student', studentSchema);
