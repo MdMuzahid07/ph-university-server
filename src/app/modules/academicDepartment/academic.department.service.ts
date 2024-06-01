@@ -5,6 +5,12 @@ import AcademicDepartmentModel from "./academic.department.schema.model";
 
 const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
 
+    // we can also handle this validation in schema 
+    // const isDepartmentExists = await AcademicDepartmentModel.findOne({ name: payload.name });
+
+    // if (isDepartmentExists) {
+    //     throw new Error("This department is already exists");
+    // }
 
     const result = await AcademicDepartmentModel.create(payload);
 
