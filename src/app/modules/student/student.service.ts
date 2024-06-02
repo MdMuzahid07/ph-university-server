@@ -27,6 +27,12 @@ const getSingleStudentFromDB = async (id: string) => {
 };
 
 
+const updateStudentIntoDB = async (id: string) => {
+  const result = await StudentModel.findOneAndUpdate({ id })
+  return result;
+};
+
+
 const deleteAStudent = async (id: string) => {
 
   const session = await mongoose.startSession();
@@ -80,5 +86,6 @@ const deleteAStudent = async (id: string) => {
 export const StudentServices = {
   getAllStudentsFromDB,
   getSingleStudentFromDB,
-  deleteAStudent
+  deleteAStudent,
+  updateStudentIntoDB
 };

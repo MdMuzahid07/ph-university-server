@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { StudentServices } from './student.service';
 import catchAsync from '../../utils/catchAsync';
+import httpStatus from 'http-status';
 
 
 
@@ -31,6 +32,21 @@ const getSingleStudent: RequestHandler = async (req, res, next) => {
   }
 };
 
+const updateStudent: RequestHandler = async (req, res, next) => {
+  try {
+    const { studentId } = req.params;
+    const result = await StudentServices.updateStudentIntoDB(studentId);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      message: 'Student is updated successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteStudent: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
@@ -49,5 +65,6 @@ const deleteStudent: RequestHandler = async (req, res, next) => {
 export const StudentControllers = {
   getAllStudents,
   getSingleStudent,
-  deleteStudent
+  deleteStudent,
+  updateStudent
 };

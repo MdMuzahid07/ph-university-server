@@ -44,6 +44,9 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
         session.startTransaction();
 
 
+        if (!admissionSemesterInfo) {
+            throw new Error("academic semester not found");
+        }
         // set generated id
         userData.id = await generateStudentId(admissionSemesterInfo);
 
