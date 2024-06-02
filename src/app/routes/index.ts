@@ -1,6 +1,6 @@
 
 import express from "express";
-import { StudentRoutes } from "../modules/student/student.route";
+import { StudentRoutes } from "../modules/student/student.routes";
 import { UserRoutes } from "../modules/user/user.route";
 import { AcademicSemesterRoutes } from "../modules/academicSemester/academic.semester.routes";
 import { AcademicFacultyRoutes } from "../modules/academicFaculty/academic.faculty.routes";
