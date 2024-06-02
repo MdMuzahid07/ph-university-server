@@ -42,7 +42,6 @@ const createStudentValidationSchema = z.object({
             permanentAddress: z.string().trim(),
             profileImage: z.string().optional(),
             admissionSemester: z.string(),
-            isDeleted: z.boolean(),
             academicDepartment: z.string()
         })
     })
@@ -91,7 +90,6 @@ const updateStudentValidationSchema = z.object({
             permanentAddress: z.string().trim().optional(),
             profileImage: z.string().optional(),
             admissionSemester: z.string().optional(),
-            isDeleted: z.boolean().optional(),
             academicDepartment: z.string().optional()
         })
     })

@@ -35,7 +35,8 @@ const getSingleStudent: RequestHandler = async (req, res, next) => {
 const updateStudent: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
-    const result = await StudentServices.updateStudentIntoDB(studentId);
+    const { student } = req.body;
+    const result = await StudentServices.updateStudentIntoDB(studentId, student);
 
     res.status(httpStatus.OK).json({
       success: true,
