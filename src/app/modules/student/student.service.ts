@@ -10,24 +10,62 @@ import { TStudent } from './student.interface';
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
   let searchTerm = " ";
+  const queryObj = { ...query };
 
   if (query?.searchTerm) {
     searchTerm = query?.searchTerm as string;
   };
 
-  const result = await StudentModel.find({
+  const searchQuery = StudentModel.find({
     $or: ["email", "name.firstName", "presentAddress"].map((field) => (
       {
         [field]: { $regex: searchTerm, $options: "i" }
       }
     ))
-  }).populate({
-    path: "academicDepartment",
-    populate: {
-      path: "academicFaculty"
-    }
-  }).populate("admissionSemester");
-  return result;
+  })
+
+  // filter
+  const excludeFields = ["searchTerm", "sort", "limit", "page"];
+
+  excludeFields.forEach(el => delete queryObj[el]);
+
+
+  console.log({ query }, { queryObj })
+
+  const filterQuery = searchQuery.find(queryObj)
+    .populate({
+      path: "academicDepartment",
+      populate: {
+        path: "academicFaculty"
+      }
+    }).populate("admissionSemester");
+
+
+  let sort = "-createdAt";
+
+  if (query.sort) {
+    sort = query.sort as string;
+  };
+
+  const sortQuery = filterQuery.sort(sort);
+
+  let limit = 1;
+  let page = 1;
+  let skip = 0;
+
+  if (query.limit) {
+    limit = Number(query.limit);
+  };
+
+  if (query.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limit;
+  }
+
+  const paginateQuery = sortQuery.skip(skip);
+  const limitQuery = await paginateQuery.limit(limit);
+
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
