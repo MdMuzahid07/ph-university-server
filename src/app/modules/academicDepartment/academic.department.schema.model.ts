@@ -23,8 +23,6 @@ const AcademicDepartmentSchema = new Schema<TAcademicDepartment>({
 
 
 
-
-
 AcademicDepartmentSchema.pre("save", async function (next) {
 
     // we can use Direct model name or , we can use also this.model, but not supported in TS
