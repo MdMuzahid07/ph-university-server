@@ -20,13 +20,13 @@ router.delete(
     CourseControllers.deleteCourse,
 );
 
-// router.patch(
-//     '/:facultyId',
-//     requestValidator(
-//         AcademicFacultyValidation.UpdateAcademicFacultyValidationSchema,
-//     ),
-//     AcademicFacultyControllers.updateAcademicFaculty,
-// );
+router.patch(
+    '/:id',
+    requestValidator(
+        CourseValidation.updateCreateCourseValidationSchema,
+    ),
+    CourseControllers.updateCourse,
+);
 
 
 export const CourseRoute = router;
