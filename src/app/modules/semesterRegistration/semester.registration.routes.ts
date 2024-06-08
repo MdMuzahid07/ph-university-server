@@ -16,7 +16,7 @@ router.post(
 
 router.get("/:id", SemesterRegistrationController.getSingleSemesterRegistration);
 
-router.patch("/:id", SemesterRegistrationController.updateSemesterRegistration);
+router.patch("/:id", requestValidator(SemesterRegistrationValidation.updateSemesterRegistrationValidationSchema), SemesterRegistrationController.updateSemesterRegistration);
 
 router.get("/", SemesterRegistrationController.getAllSemesterRegistration);
 
