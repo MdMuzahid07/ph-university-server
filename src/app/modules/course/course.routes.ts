@@ -23,10 +23,21 @@ router.delete(
 router.put(
     "/:courseId/assign-faculties",
     requestValidator(
-        CourseValidation.assignFacultiesWithCourseValidationSchema
+        CourseValidation.facultiesWithCourseValidationSchema
     ),
     CourseControllers.assignFacultiesWithCourse
 );
+
+
+
+router.delete(
+    "/:courseId/remove-faculties",
+    requestValidator(
+        CourseValidation.facultiesWithCourseValidationSchema
+    ),
+    CourseControllers.deleteFacultiesWithCourse
+);
+
 
 router.patch(
     '/:id',
