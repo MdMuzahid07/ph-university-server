@@ -61,7 +61,7 @@ const CourseFacultySchema = new mongoose.Schema<TCourseFaculty>({
         ref: "Course",
         unique: true
     },
-    faculty: [{
+    faculties: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Faculty"
     }]

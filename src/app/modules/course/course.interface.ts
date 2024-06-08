@@ -18,5 +18,5 @@ export type TCourse = {
 
 export type TCourseFaculty = {
     course: Types.ObjectId,
-    faculty: [Types.ObjectId]
+    faculties: [Types.ObjectId]
 }
