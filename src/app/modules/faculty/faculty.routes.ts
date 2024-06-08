@@ -18,4 +18,6 @@ router.delete('/:id', FacultyControllers.deleteFaculty);
 
 router.get('/', FacultyControllers.getAllFaculties);
 
+// router.post("/create-faculty", FacultyControllers.createFaculty);
+
 export const FacultyRoutes = router;

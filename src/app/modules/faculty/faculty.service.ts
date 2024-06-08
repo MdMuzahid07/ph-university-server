@@ -89,9 +89,15 @@ const deleteFacultyFromDB = async (id: string) => {
     }
 };
 
+// const createFacultyIntoDB = async (payload: TFaculty) => {
+//     const result = await Faculty.create(payload);
+//     return result;
+// };
+
 export const FacultyServices = {
     getAllFacultiesFromDB,
     getSingleFacultyFromDB,
     updateFacultyIntoDB,
     deleteFacultyFromDB,
+    // createFacultyIntoDB
 };
