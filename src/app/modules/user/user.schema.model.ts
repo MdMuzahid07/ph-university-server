@@ -12,11 +12,16 @@ const UserSchema = new Schema<TUser, UserModelStatics>({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        // if  set this property, for find password will not visible
+        select: 0
     },
     needsPasswordChange: {
         type: Boolean,
         default: true
+    },
+    passwordChangedAt: {
+        type: Date
     },
     role: {
         type: String,
@@ -42,6 +47,7 @@ const UserSchema = new Schema<TUser, UserModelStatics>({
 
 UserSchema.pre("save", async function (next) {
     // pre hook will save the data
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const user = this;
 
     user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_round));
@@ -57,7 +63,7 @@ UserSchema.post("save", function (doc, next) {
 
 
 UserSchema.statics.isUserExistsByCustomId = async function (id: string) {
-    return await UserModel.findOne({ id });
+    return await UserModel.findOne({ id }).select("+password");
 };
 
 
