@@ -8,8 +8,10 @@ const loginUser = async (payload: TLoginUser) => {
 
     // checking if the user is exists
 
-    const isUserExists = await UserModel.findOne({ id: payload?.id });
-    console.log(isUserExists);
+    const isUserExists = await UserModel.isUserExistsByCustomId(payload?.id);
+    // console.log(isUserExists);
+
+    // isUserExistsByCustomId -> a custom statics function
 
     if (!isUserExists) {
         throw new AppError(httpStatus.NOT_FOUND, "user not found")
@@ -32,9 +34,10 @@ const loginUser = async (payload: TLoginUser) => {
 
     // checking the password is correct, by comparing hash password(bycript) with use given password
 
-    const isPasswordMatched = await bcrypt.compare(payload?.password, isUserExists?.password);
-    console.log(isPasswordMatched);
 
+    if (!await UserModel.isPasswordMatched(payload?.password, isUserExists?.password as string)) {
+        throw new AppError(httpStatus.FORBIDDEN, "password is incorrect");
+    };
 
 
     // access granted: send access token, refresh token
