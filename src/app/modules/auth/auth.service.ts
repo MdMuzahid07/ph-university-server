@@ -76,7 +76,9 @@ const changePassword = async (userData: JwtPayload, payload: { oldPassword: stri
         throw new AppError(httpStatus.FORBIDDEN, "User is blocked, and not found")
     }
 
-    // checking the password is correct, by comparing hash password(bycript) with use given password
+
+
+    // checking the password is correct, by comparing hash password(bcryipt) with use given password
     if (!await UserModel.isPasswordMatched(payload?.oldPassword, isUserExists2?.password as string)) {
         throw new AppError(httpStatus.FORBIDDEN, "password is incorrect");
     };

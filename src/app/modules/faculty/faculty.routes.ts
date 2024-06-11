@@ -4,6 +4,7 @@ import requestValidator from '../../middlewares/requestValidator';
 import { FacultyControllers } from './faculty.controller';
 import { updateFacultyValidationSchema } from './faculty.validation';
 import auth from '../../middlewares/auth';
+import { USER_ROLE } from '../user/user.constants';
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.patch(
 
 router.delete('/:id', FacultyControllers.deleteFaculty);
 
-router.get('/', auth(), FacultyControllers.getAllFaculties);
+router.get('/', auth(USER_ROLE.admin, USER_ROLE.faculty), FacultyControllers.getAllFaculties);
 
 // router.post("/create-faculty", FacultyControllers.createFaculty);
 
