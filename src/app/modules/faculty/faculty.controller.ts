@@ -4,20 +4,6 @@ import sendResponse from '../../utils/sendResponse';
 import { FacultyServices } from './faculty.service';
 
 
-
-// const createFaculty = catchAsync(async (req, res) => {
-//     const result = await FacultyServices.createFacultyIntoDB(req.body);
-
-//     sendResponse(res, {
-//         statusCode: httpStatus.OK,
-//         success: true,
-//         message: 'Faculty is created successfully',
-//         data: result,
-//     });
-// });
-
-
-
 const getSingleFaculty = catchAsync(async (req, res) => {
     const { id } = req.params;
     const result = await FacultyServices.getSingleFacultyFromDB(id);
@@ -32,6 +18,8 @@ const getSingleFaculty = catchAsync(async (req, res) => {
 
 const getAllFaculties = catchAsync(async (req, res) => {
     const result = await FacultyServices.getAllFacultiesFromDB(req.query);
+
+    console.log(req.cookies);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
