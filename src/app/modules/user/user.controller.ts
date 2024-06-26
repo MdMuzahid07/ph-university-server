@@ -3,6 +3,7 @@ import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
 import { RequestHandler } from "express";
 import catchAsync from "../../utils/catchAsync";
+import AppError from "../../errors/AppError";
 
 const createStudent: RequestHandler = async (req, res, next) => {
     try {
@@ -49,8 +50,28 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 
 
+const getMe = catchAsync(async (req, res) => {
+
+    const token = req.headers.authorization;
+
+    if (!token) {
+        throw new AppError(httpStatus.NOT_FOUND, "token not found")
+    };
+
+    const result = await UserService.getMe(token);
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'retrieved my data successfully',
+        data: result,
+    });
+});
+
+
 export const UserController = {
     createStudent,
     createFaculty,
     createAdmin,
+    getMe
 };
