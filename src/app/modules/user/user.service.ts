@@ -221,10 +221,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     }
 };
 
-const getMe = async (token: string) => {
-    const decoded = VerifyToken(token, config.jwt_access_secret as string);
-
-    const { userId, role } = decoded;
+const getMe = async (userId: string, role: string) => {
 
     let result = null;
     if (role === "student") {
@@ -241,10 +238,21 @@ const getMe = async (token: string) => {
 };
 
 
+const changeStatus = async (id: string, payload: { payload: status }) => {
+
+    const result = await UserModel.findByIdAndUpdate(id, payload, {
+        new: true
+    });
+
+    return result;
+};
+
+
 
 export const UserService = {
     createStudentIntoDB,
     createFacultyIntoDB,
     createAdminIntoDB,
-    getMe
+    getMe,
+    changeStatus
 };
