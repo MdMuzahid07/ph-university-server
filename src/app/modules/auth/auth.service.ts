@@ -191,6 +191,51 @@ const forgetPassword = async (userId: string) => {
     const resetUILink = `${config.rest_password_ui_link}/?id=${isUserExists.id}&token=${resetToken}`;
 
     sendEmail(isUserExists.email, resetUILink);
+};
+
+
+const resetPassword = async (payload: { id: string, newPassword: string }, token: string) => {
+
+    // checking if the user is exists
+    const isUserExists = await UserModel.isUserExistsByCustomId(payload?.id);
+    // console.log(isUserExists);
+
+    // isUserExistsByCustomId -> a custom statics function
+    if (!isUserExists) {
+        throw new AppError(httpStatus.NOT_FOUND, "user not found")
+    };
+
+    // checking user softly deleted or not
+    const isDeleted = isUserExists?.isDeleted;
+    if (isDeleted) {
+        throw new AppError(httpStatus.FORBIDDEN, "the is user softly deleted, and not found")
+    }
+
+    // check the user is blocked or not
+    const userStatus = isUserExists?.status;
+    if (userStatus === "blocked") {
+        throw new AppError(httpStatus.FORBIDDEN, "User is blocked, and not found")
+    };
+
+
+    const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
+
+    // checking user is authorized for this access
+    const { userId, iat } = decoded;
+
+    if (userId !== payload?.id) {
+        throw new AppError(httpStatus.FORBIDDEN, "Invalid user, your are forbidden");
+    };
+
+    // hash new password
+    const newHashedPassword = await bcrypt.hash(payload?.newPassword, Number(config.bcrypt_salt_round));
+
+
+    await UserModel.findOneAndUpdate({ id: userId, role: decoded?.role }, {
+        password: newHashedPassword,
+        needsPasswordChange: false,
+        passwordChangedAt: new Date()
+    });
 
 };
 
@@ -199,5 +244,6 @@ export const AuthServices = {
     loginUser,
     changePassword,
     refreshToken,
-    forgetPassword
+    forgetPassword,
+    resetPassword
 };
