@@ -6,6 +6,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from "bcrypt";
 import { createToken } from "./auth.utils";
+import { sendEmail } from "../../utils/sendEmail";
 
 const loginUser = async (payload: TLoginUser) => {
 
@@ -184,11 +185,13 @@ const forgetPassword = async (userId: string) => {
         role: isUserExists?.role
     };
 
-    const accessToken = createToken(jwtPayload, config.jwt_access_secret as string, "10m");
+    const resetToken = createToken(jwtPayload, config.jwt_access_secret as string, "10m");
 
-    const resetUILink = `http://localhost:3000/?id=${isUserExists.id}&token=${accessToken}`;
+    // we have to send this link through email
+    const resetUILink = `${config.rest_password_ui_link}/?id=${isUserExists.id}&token=${resetToken}`;
 
-    console.log(resetUILink);
+    sendEmail(isUserExists.email, resetUILink);
+
 };
 
 
