@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 import config from "../../config";
 import AcademicSemesterModel from "../academicSemester/academic.semester.schema.model";
@@ -12,9 +13,9 @@ import { TFaculty } from "../faculty/faculty.interface";
 import AcademicDepartmentModel from "../academicDepartment/academic.department.schema.model";
 import { Faculty } from "../faculty/faculty.schema.model";
 import { Admin } from "../admin/admin.model";
-import { VerifyToken } from "../auth/auth.utils";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createStudentIntoDB = async (password: string, studentData: TStudent) => {
+const createStudentIntoDB = async (file: any, password: string, studentData: TStudent) => {
 
 
 
@@ -58,6 +59,14 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
         // set generated id
         userData.id = await generateStudentId(admissionSemesterInfo);
 
+        const imgName = `${userData?.id}${studentData?.name?.firstName}`;
+        const path = file?.path;
+
+        // send image to cloudinary
+        const { secure_url } = await sendImageToCloudinary(imgName, path);
+
+        console.log(secure_url, "secure url =======================");
+
         // create a user( transaction-1 )
 
         const newUser = await UserModel.create([userData], { session }); // newUser became an array after using transaction
@@ -73,6 +82,8 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
         studentData.id = newUser[0].id;
 
         studentData.user = newUser[0]._id; // reference _id
+
+        studentData.profileImage = secure_url;
 
         // create a student ( transaction-2 )
         const newStudent = await StudentModel.create([studentData], { session });
@@ -238,7 +249,7 @@ const getMe = async (userId: string, role: string) => {
 };
 
 
-const changeStatus = async (id: string, payload: { payload: status }) => {
+const changeStatus = async (id: string, payload: { status: string }) => {
 
     const result = await UserModel.findByIdAndUpdate(id, payload, {
         new: true
