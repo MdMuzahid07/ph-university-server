@@ -221,7 +221,7 @@ const resetPassword = async (payload: { id: string, newPassword: string }, token
     const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
 
     // checking user is authorized for this access
-    const { userId, iat } = decoded;
+    const { userId } = decoded;
 
     if (userId !== payload?.id) {
         throw new AppError(httpStatus.FORBIDDEN, "Invalid user, your are forbidden");

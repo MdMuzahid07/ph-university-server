@@ -2,10 +2,15 @@ import express from 'express';
 import { AcademicFacultyControllers } from './academic.faculty.controller';
 import requestValidator from '../../middlewares/requestValidator';
 import { AcademicFacultyValidation } from './academic.faculty.validation';
+import { USER_ROLE } from '../user/user.constants';
+import auth from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.post("/create-academic-faculty", requestValidator(AcademicFacultyValidation.CreateAcademicFacultyValidationSchema), AcademicFacultyControllers.createAcademicFaculty);
+router.post("/create-academic-faculty",
+    auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+    requestValidator(AcademicFacultyValidation.CreateAcademicFacultyValidationSchema), AcademicFacultyControllers.createAcademicFaculty
+);
 
 router.get('/', AcademicFacultyControllers.getAllAcademicFaculties);
 

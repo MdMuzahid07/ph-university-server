@@ -21,7 +21,7 @@ app.use('/api/v1', router);
 
 const test = async (req: Request, res: Response) => {
   const a = 10;
-  res.send(a);
+  res.sendStatus(a);
 };
 
 app.get('/', test);
