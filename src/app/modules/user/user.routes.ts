@@ -26,28 +26,38 @@ router.post(
 
 router.post(
     '/create-faculty',
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+    upload.single("file"),
+    (req: Request, res: Response, next: NextFunction) => {
+        req.body = JSON.parse(req.body.data);
+        next();
+    },
     requestValidator(createFacultyValidationSchema),
     UserController.createFaculty,
 );
 
 router.post(
     '/create-admin',
-    // auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
+    upload.single("file"),
+    (req: Request, res: Response, next: NextFunction) => {
+        req.body = JSON.parse(req.body.data);
+        next();
+    },
     requestValidator(createAdminValidationSchema),
     UserController.createAdmin,
 );
 
 router.get(
     '/me',
-    auth(USER_ROLE.student, USER_ROLE.admin, USER_ROLE.faculty),
+    auth(USER_ROLE.student, USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.superAdmin),
     UserController.getMe,
 );
 
 
 router.post(
     '/change-status/:id',
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.superAdmin),
     requestValidator(UserValidation.ChangeStatusValidationSchema),
     UserController.changeStatus,
 );

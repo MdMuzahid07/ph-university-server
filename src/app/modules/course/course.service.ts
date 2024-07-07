@@ -25,8 +25,12 @@ const getAllCoursesFromDB = async (query: Record<string, unknown>) => {
         .paginate()
         .fields()
 
-    const res = await courseQuery.modelQuery;
-    return res;
+    const meta = await courseQuery.countTotal();
+    const result = await courseQuery.modelQuery;
+    return {
+        meta,
+        result
+    };
 };
 
 
@@ -166,6 +170,11 @@ const removeFacultiesWithCourseFromDB = async (id: string, payload: Partial<TCou
     return result;
 };
 
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+    const result = await CourseFacultyModel.findOne({ course: courseId }).populate("faculties");
+    return result;
+};
+
 
 export const CourseServices = {
     createCourseIntoDB,
@@ -174,5 +183,6 @@ export const CourseServices = {
     deleteCourseFromBD,
     courseUpdateInDB,
     assignFacultiesWithCourseIntoDB,
-    removeFacultiesWithCourseFromDB
+    removeFacultiesWithCourseFromDB,
+    getFacultiesWithCourseFromDB
 };

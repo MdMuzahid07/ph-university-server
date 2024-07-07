@@ -11,91 +11,11 @@ import { searchableFields } from './student.constants';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
-  // let searchTerm = " ";
-  // const queryObj = { ...query };
-
-  // if (query?.searchTerm) {
-  //   searchTerm = query?.searchTerm as string;
-  // };
-
-
-
-  // const searchQuery = StudentModel.find({
-  //   $or: ["email", "name.firstName", "presentAddress"].map((field) => (
-  //     {
-  //       [field]: { $regex: searchTerm, $options: "i" }
-  //     }
-  //   ))
-  // })
-
-  // filter
-
-
-
-
-  // const filterQuery = searchQuery.find(queryObj)
-  //   .populate({
-  //     path: "academicDepartment",
-  //     populate: {
-  //       path: "academicFaculty"
-  //     }
-  //   }).populate("admissionSemester");
-
-
-  // let sort = "-createdAt";
-
-  // if (query.sort) {
-  //   sort = query.sort as string;
-  // };
-
-  // const sortQuery = filterQuery.sort(sort);
-
-  // let limit = 1;
-  // let page = 1;
-  // let skip = 0;
-
-  // if (query.limit) {
-  //   limit = Number(query.limit);
-  // };
-
-  // if (query.page) {
-  //   page = Number(query.page);
-  //   skip = (page - 1) * limit;
-  // }
-
-  // const paginateQuery = sortQuery.skip(skip);
-  // const limitQuery = paginateQuery.limit(limit);
-
-
-
-
-  // field limiting
-
-
-
-  // let fields = "-__v";
-
-  // if (query.fields) {
-  //   fields = (query.fields as string).split(",").join(" ");
-  // }
-
-
-
-  // const fieldQuery = await limitQuery.select(fields);
-
-  // return fieldQuery;
-
-
-
-  const studentQuery = new QueryBuilder(StudentModel.find().populate({
-    path: "academicDepartment",
-    populate: {
-      path: "academicFaculty"
-    }
-  }).populate("admissionSemester")
+  const studentQuery = new QueryBuilder(StudentModel.find()
+    .populate("user")
+    .populate("academicDepartment academicFaculty")
+    .populate("admissionSemester")
     , query).search(searchableFields).filter().sort().paginate().fields();
-
-
 
 
   const res = await studentQuery.modelQuery;
@@ -103,12 +23,6 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   return res;
 
 };
-
-
-
-
-
-
 
 
 
