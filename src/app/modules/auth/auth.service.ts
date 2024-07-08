@@ -168,7 +168,7 @@ const forgetPassword = async (userId: string) => {
     // checking user softly deleted or not
     const isDeleted = isUserExists?.isDeleted;
     if (isDeleted) {
-        throw new AppError(httpStatus.FORBIDDEN, "the is user softly deleted, and not found")
+        throw new AppError(httpStatus.FORBIDDEN, "the user is softly deleted, and not found")
     }
 
     // check the user is blocked or not
