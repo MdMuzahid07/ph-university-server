@@ -16,8 +16,16 @@ const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
     return result;
 };
 
-const getAllAcademicSemestersFromDB = async () => {
-    const result = await AcademicSemesterModel.find();
+const getAllAcademicSemestersFromDB = async (query) => {
+
+    let result;
+
+    if (query) {
+        result = await AcademicSemesterModel.find(query)
+    } else {
+        result = await AcademicSemesterModel.find()
+    }
+
     return result;
 };
 
