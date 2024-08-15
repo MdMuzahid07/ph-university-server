@@ -17,10 +17,13 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     .populate("admissionSemester")
     , query).search(searchableFields).filter().sort().paginate().fields();
 
-
+  const meta = await studentQuery.countTotal();
   const res = await studentQuery.modelQuery;
 
-  return res;
+  return {
+    meta,
+    res
+  };
 
 };
 
