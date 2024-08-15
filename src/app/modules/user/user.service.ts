@@ -116,7 +116,7 @@ const createStudentIntoDB = async (file: any, password: string, studentData: TSt
 
         // end session
         await session.endSession();
-
+        console.log(newStudent);
         return newStudent;
 
 
