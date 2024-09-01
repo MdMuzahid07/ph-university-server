@@ -1,32 +1,35 @@
-import httpStatus from "http-status";
-import AppError from "../../errors/AppError";
-import { academicSemesterNameCodeMapper } from "./academic.semester.constants";
+import { academicSemesterNameCodeMapper, AcademicSemesterSearchableFields } from "./academic.semester.constants";
 import { TAcademicSemester } from "./academic.semester.interface";
 import AcademicSemesterModel from "./academic.semester.schema.model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
-
     if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
-        throw new AppError(httpStatus.BAD_REQUEST, "Academic semester code is not valid");
+        throw new Error('Invalid Semester Code');
     }
 
     const result = await AcademicSemesterModel.create(payload);
-
     return result;
 };
 
-const getAllAcademicSemestersFromDB = async (query) => {
+const getAllAcademicSemestersFromDB = async (
+    query: Record<string, unknown>,
+) => {
+    const academicSemesterQuery = new QueryBuilder(AcademicSemesterModel.find(), query)
+        .search(AcademicSemesterSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
 
-    let result;
+    const result = await academicSemesterQuery.modelQuery;
+    const meta = await academicSemesterQuery.countTotal();
 
-    if (query) {
-        result = await AcademicSemesterModel.find(query)
-    } else {
-        result = await AcademicSemesterModel.find()
-    }
-
-    return result;
+    return {
+        meta,
+        result,
+    };
 };
 
 const getSingleAcademicSemesterFromDB = async (id: string) => {
@@ -43,7 +46,7 @@ const updateAcademicSemesterIntoDB = async (
         payload.code &&
         academicSemesterNameCodeMapper[payload.name] !== payload.code
     ) {
-        throw new AppError(httpStatus.BAD_REQUEST, 'Invalid Semester Code');
+        throw new Error('Invalid Semester Code');
     }
 
     const result = await AcademicSemesterModel.findOneAndUpdate({ _id: id }, payload, {
@@ -51,7 +54,6 @@ const updateAcademicSemesterIntoDB = async (
     });
     return result;
 };
-
 
 export const AcademicSemesterServices = {
     createAcademicSemesterIntoDB,
