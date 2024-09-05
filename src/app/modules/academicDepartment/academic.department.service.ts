@@ -1,5 +1,3 @@
-import httpStatus from "http-status";
-import AppError from "../../errors/AppError";
 import { TAcademicDepartment } from "./academic-department.interface";
 import AcademicDepartmentModel from "./academic.department.schema.model";
 

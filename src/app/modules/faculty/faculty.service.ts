@@ -8,9 +8,10 @@ import { Faculty } from './faculty.schema.model';
 import { FacultySearchableFields } from './faculty.constants';
 import UserModel from '../user/user.schema.model';
 
+
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
     const facultyQuery = new QueryBuilder(
-        Faculty.find().populate("academicDepartment academicFaculty"),
+        Faculty.find().populate('academicDepartment academicFaculty'),
         query,
     )
         .search(FacultySearchableFields)
@@ -20,11 +21,17 @@ const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
         .fields();
 
     const result = await facultyQuery.modelQuery;
-    return result;
+    const meta = await facultyQuery.countTotal();
+    return {
+        result,
+        meta,
+    };
 };
 
 const getSingleFacultyFromDB = async (id: string) => {
-    const result = await Faculty.findById(id).populate('academicDepartment');
+    const result = await Faculty.findById(id).populate(
+        'academicDepartment academicFaculty',
+    );
 
     return result;
 };
@@ -89,15 +96,9 @@ const deleteFacultyFromDB = async (id: string) => {
     }
 };
 
-// const createFacultyIntoDB = async (payload: TFaculty) => {
-//     const result = await Faculty.create(payload);
-//     return result;
-// };
-
 export const FacultyServices = {
     getAllFacultiesFromDB,
     getSingleFacultyFromDB,
     updateFacultyIntoDB,
     deleteFacultyFromDB,
-    // createFacultyIntoDB
 };
